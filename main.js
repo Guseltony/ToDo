@@ -5,6 +5,7 @@ const taskContainer = document.querySelector(".tasks");
 
 tabs.map((t, index) => {
   const tab = document.createElement("div");
+  tab.dataset.name = t
   const tabName = document.createElement("p");
   tabName.textContent = t;
   tab.classList.add("tab");
@@ -12,12 +13,65 @@ tabs.map((t, index) => {
   taskTabs.appendChild(tab);
 });
 
+const allTabs = document.querySelectorAll('.tab')
+
+
+let todosCopy = [...todos];
+
+
+function filterTodos(name) {
+
+  let tasks = [...todosCopy]
+
+  switch (name) {
+
+
+    case 'completed':
+          tasks = tasks.filter((t) => t.completed);
+          taskContainer.innerHTML = "";
+          // listTasks();
+      break;
+    
+    case 'pending':
+          tasks = tasks.filter((t) => t.completed === false);
+          taskContainer.innerHTML = "";
+          // listTasks();
+      break;
+    
+    case 'due':
+          tasks = tasks.filter((t) => t.due);
+          taskContainer.innerHTML = "";
+          // listTasks();
+      break;
+    
+    case 'all':
+          tasks = [...todos]
+          taskContainer.innerHTML = "";
+          // listTasks();
+      break;
+  
+    // default:
+    //   break;
+  }
+  console.log(todosCopy)
+
+  return listTasks(tasks)
+}
+
+allTabs.forEach((t) => {
+  t.addEventListener('click', () => {
+    filterTodos(t.dataset.name)
+  })
+})
 // ! called the tasks api.
 
 let uncheckedEl;
 
-function listTasks() {
-  todos.map((todo) => {
+console.log(todosCopy)
+
+
+function listTasks(todosCopy) {
+  todosCopy.map((todo) => {
     const taskEl = document.createElement("div");
     taskEl.classList.add("task");
     if (todo.completed)
@@ -110,20 +164,20 @@ function listTasks() {
     taskContainer.appendChild(taskEl);
   });
 }
-listTasks();
+listTasks(todosCopy);
 
 uncheckedEl = document.querySelectorAll(".checkEl");
 
 function checkTask(id) {
-  for (let i = 0; i < todos.length; i++) {
-    if (todos[i].id === id) {
-      todos[i].completed = true;
+  for (let i = 0; i < todosCopy.length; i++) {
+    if (todosCopy[i].id === id) {
+      todosCopy[i].completed = true;
       break;
     }
   }
   // re-render: clear container and call listTasks again
   taskContainer.innerHTML = "";
-  listTasks();
+  listTasks(todosCopy);
 
   // re-query checks and re-attach listeners (because DOM changed)
   uncheckedEl = document.querySelectorAll(".checkEl");
@@ -142,5 +196,10 @@ uncheckedEl.forEach((el) => {
     checkTask(id);
   });
 });
+
+
+// tabs functionality
+
+
 
 

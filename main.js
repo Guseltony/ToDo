@@ -20,57 +20,55 @@ let todosCopy = [...todos];
 
 
 function filterTodos(name) {
-
-  let tasks = [...todosCopy]
+  let tasks = [...todosCopy];
 
   switch (name) {
+    case "completed":
+      tasks = tasks.filter((t) => t.completed);
+      taskContainer.innerHTML = "";
+      // listTasks();
+      break;
 
+    case "pending":
+      tasks = tasks.filter((t) => !t.completed);
+      taskContainer.innerHTML = "";
+      // listTasks();
+      break;
 
-    case 'completed':
-          tasks = tasks.filter((t) => t.completed);
-          taskContainer.innerHTML = "";
-          // listTasks();
+    case "due":
+      tasks = tasks.filter((t) => t.due);
+      taskContainer.innerHTML = "";
+      // listTasks();
       break;
-    
-    case 'pending':
-          tasks = tasks.filter((t) => t.completed === false);
-          taskContainer.innerHTML = "";
-          // listTasks();
+
+    case "all":
+      tasks = [...todos];
+      taskContainer.innerHTML = "";
+      // listTasks();
       break;
-    
-    case 'due':
-          tasks = tasks.filter((t) => t.due);
-          taskContainer.innerHTML = "";
-          // listTasks();
-      break;
-    
-    case 'all':
-          tasks = [...todos]
-          taskContainer.innerHTML = "";
-          // listTasks();
-      break;
-  
+
     // default:
     //   break;
   }
-  console.log(todosCopy)
+  console.log(todosCopy);
 
-  return listTasks(tasks)
+  return listTasks(tasks);
 }
 
 allTabs.forEach((t) => {
-  t.addEventListener('click', () => {
-    filterTodos(t.dataset.name)
-  })
-})
+  t.addEventListener("click", () => {
+    filterTodos(t.dataset.name);
+  });
+});
 // ! called the tasks api.
 
 let uncheckedEl;
 
-console.log(todosCopy)
-
+console.log(todosCopy);
 
 function listTasks(todosCopy) {
+  taskContainer.innerHTML = "";
+
   todosCopy.map((todo) => {
     const taskEl = document.createElement("div");
     taskEl.classList.add("task");
@@ -82,7 +80,8 @@ function listTasks(todosCopy) {
     const title = document.createElement("h1");
     const check = document.createElement("span");
     check.classList.add("checkEl");
-    if (!todo.completed) check.dataset.id = todo.id;
+    // if (!todo.completed)
+    check.dataset.id = todo.id;
     const completedTask = todo.completed
       ? '<i class="fa-solid fa-circle-check"></i>'
       : '<i class="fa-regular fa-circle unchecked"></i>';
@@ -163,12 +162,16 @@ function listTasks(todosCopy) {
 
     taskContainer.appendChild(taskEl);
   });
+
+  attachCheckListeners();
 }
 listTasks(todosCopy);
 
 uncheckedEl = document.querySelectorAll(".checkEl");
 
 function checkTask(id) {
+  console.log(todosCopy);
+  console.log("checking");
   for (let i = 0; i < todosCopy.length; i++) {
     if (todosCopy[i].id === id) {
       todosCopy[i].completed = true;
@@ -189,13 +192,28 @@ function checkTask(id) {
   });
 }
 
-// after you set uncheckedEl (querySelectorAll), attach listeners like this:
-uncheckedEl.forEach((el) => {
-  el.addEventListener("click", () => {
-    const id = Number(el.dataset.id); // convert to number if your todo ids are numbers
-    checkTask(id);
+
+function attachCheckListeners() {
+  const checkEls = document.querySelectorAll(".checkEl");
+  checkEls.forEach((el) => {
+    el.removeEventListener?.("click", el._boundClick); // safe-remove any previous (optional)
+    const handler = () => {
+      const id = Number(el.dataset.id);
+      checkTask(id);
+    };
+    el._boundClick = handler; // keep ref if you want to remove later
+    el.addEventListener("click", handler);
   });
-});
+}
+
+
+// after you set uncheckedEl (querySelectorAll), attach listeners like this:
+// uncheckedEl.forEach((el) => {
+//   el.addEventListener("click", () => {
+//     const id = Number(el.dataset.id); // convert to number if your todo ids are numbers
+//     checkTask(id);
+//   });
+// });
 
 
 // tabs functionality

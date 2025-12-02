@@ -215,4 +215,5 @@ body {
 
 .task-title span i, .desc span i {
   font-size: 25px;
+  cursor: pointer;
 }

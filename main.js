@@ -5,6 +5,7 @@ const taskContainer = document.querySelector(".tasks");
 
 
 let storageTask;
+let activeTab;
 
 fetchFromLocaleStorage();
 
@@ -13,6 +14,9 @@ function createTaskTab() {
     const tab = document.createElement("div");
     tab.dataset.name = t;
     const tabName = document.createElement("p");
+    if (t === "all") {
+      tab.classList.add("active");
+    }
     const quantity = document.createElement("span");
     quantity.classList.add(t);
     quantity.textContent = "0";
@@ -55,12 +59,14 @@ function filterTodos(name) {
   switch (name) {
     case "completed":
       tasks = tasks.filter((t) => t.completed);
+      activeTab = "completed";
       taskContainer.innerHTML = "";
       // listTasks();
       break;
 
     case "pending":
       tasks = tasks.filter((t) => !t.completed);
+      activeTab = "pending";
       taskContainer.innerHTML = "";
       // listTasks();
       break;
@@ -73,6 +79,7 @@ function filterTodos(name) {
 
     case "all":
       tasks = tasks;
+      activeTab = "all";
       taskContainer.innerHTML = "";
       // listTasks();
       break;
@@ -87,6 +94,15 @@ function filterTodos(name) {
 
 allTabs.forEach((t) => {
   t.addEventListener("click", () => {
+    for (let i = 0; i < allTabs.length; i++) {
+      console.log("i:", allTabs[i]);
+      if (allTabs[i].classList.contains("active")) {
+        allTabs[i].classList.remove("active");
+      }
+
+      t.classList.add("active");
+    }
+
     filterTodos(t.dataset.name);
   });
 });
@@ -233,7 +249,9 @@ function checkTask(id) {
   // re-render: clear container and call listTasks again
   taskContainer.innerHTML = "";
   console.log("storageTask:", storageTask);
-  listTasks(storageTask);
+
+  if (activeTab === "pending") filterTodos("pending");
+  else listTasks(storageTask);
 
   localStorage.setItem("tasks", JSON.stringify(storageTask));
   getTasksLength();

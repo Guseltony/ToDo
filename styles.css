@@ -134,6 +134,22 @@ body {
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.tab span {
+  color: #fff;
+  font-size: 12px;
+  background: #232f4d;
+  width: 20px;
+  height:20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tab:not(:first-child) {

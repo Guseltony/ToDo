@@ -3,24 +3,54 @@ const tabs = ["all", "completed", "pending", "due"];
 const taskTabs = document.querySelector(".task-tab");
 const taskContainer = document.querySelector(".tasks");
 
-tabs.map((t, index) => {
-  const tab = document.createElement("div");
-  tab.dataset.name = t
-  const tabName = document.createElement("p");
-  tabName.textContent = t;
-  tab.classList.add("tab");
-  tab.appendChild(tabName);
-  taskTabs.appendChild(tab);
-});
 
-const allTabs = document.querySelectorAll('.tab')
+let storageTask;
 
+fetchFromLocaleStorage();
+
+function createTaskTab() {
+  tabs.map((t, index) => {
+    const tab = document.createElement("div");
+    tab.dataset.name = t;
+    const tabName = document.createElement("p");
+    const quantity = document.createElement("span");
+    quantity.classList.add(t);
+    quantity.textContent = "0";
+    tabName.textContent = t;
+    tab.classList.add("tab");
+    tab.appendChild(tabName);
+    tab.appendChild(quantity);
+    taskTabs.appendChild(tab);
+  });
+
+  getTasksLength();
+}
+
+createTaskTab();
+
+const allTabs = document.querySelectorAll(".tab");
 
 let todosCopy = [...todos];
 
+// ! localStorage function
+
+function fetchFromLocaleStorage() {
+  // taking from the localStorage
+  console.log("from local storage");
+  storageTask = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  if (storageTask.length === 0) {
+    storageTask = [...todos];
+    localStorage.setItem("tasks", JSON.stringify(storageTask));
+  }
+
+  listTasks(storageTask);
+  console.log("from local storage:", storageTask);
+  // getTasksLength();
+}
 
 function filterTodos(name) {
-  let tasks = [...todosCopy];
+  let tasks = [...storageTask];
 
   switch (name) {
     case "completed":
@@ -42,7 +72,7 @@ function filterTodos(name) {
       break;
 
     case "all":
-      tasks = [...todos];
+      tasks = tasks;
       taskContainer.innerHTML = "";
       // listTasks();
       break;
@@ -60,16 +90,34 @@ allTabs.forEach((t) => {
     filterTodos(t.dataset.name);
   });
 });
+
+// getting the number of all tasks, completed task and pending task
+function getTasksLength() {
+  console.log("setting the length");
+  const all = document.querySelector(".all");
+  const completed = document.querySelector(".completed");
+  const pending = document.querySelector(".pending");
+
+  const allLength = storageTask.length;
+  all.textContent = allLength ? allLength : "0";
+  const completedTaskArray = storageTask.filter((t) => t.completed);
+  const completedTaskLength = completedTaskArray.length;
+  completed.textContent = completedTaskLength ? completedTaskLength : "0";
+  const pendingTaskArray = storageTask.filter((t) => !t.completed);
+  const pendingTaskLength = pendingTaskArray.length;
+  pending.textContent = pendingTaskLength ? pendingTaskLength : "0";
+}
+
 // ! called the tasks api.
 
 let uncheckedEl;
 
 console.log(todosCopy);
 
-function listTasks(todosCopy) {
+function listTasks(tasks) {
   taskContainer.innerHTML = "";
 
-  todosCopy.map((todo) => {
+  tasks.map((todo) => {
     const taskEl = document.createElement("div");
     taskEl.classList.add("task");
     if (todo.completed)
@@ -165,22 +213,30 @@ function listTasks(todosCopy) {
 
   attachCheckListeners();
 }
-listTasks(todosCopy);
+// listTasks(todosCopy);
+
+// * save to local storage
+
+// localStorage.setItem('tasks', JSON.stringify(todosCopy))
 
 uncheckedEl = document.querySelectorAll(".checkEl");
 
 function checkTask(id) {
-  console.log(todosCopy);
+  // console.log(todosCopy);
   console.log("checking");
-  for (let i = 0; i < todosCopy.length; i++) {
-    if (todosCopy[i].id === id) {
-      todosCopy[i].completed = true;
+  for (let i = 0; i < storageTask.length; i++) {
+    if (storageTask[i].id === id) {
+      storageTask[i].completed = true;
       break;
     }
   }
   // re-render: clear container and call listTasks again
   taskContainer.innerHTML = "";
-  listTasks(todosCopy);
+  console.log("storageTask:", storageTask);
+  listTasks(storageTask);
+
+  localStorage.setItem("tasks", JSON.stringify(storageTask));
+  getTasksLength();
 
   // re-query checks and re-attach listeners (because DOM changed)
   uncheckedEl = document.querySelectorAll(".checkEl");

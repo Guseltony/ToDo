@@ -45,6 +45,106 @@
       <!-- * tasks -->
       <div class="tasks">
       </div>
+
+      <!-- * form -->
+      <div class="form-container">
+       
+        <form id="form">
+        <h2>Create a New Task</h2>
+  
+        <!-- Title -->
+        <div class="field">
+          <p>Title</p>
+          <input type="text" placeholder="Enter task title..." />
+        </div>
+  
+        <!-- Description -->
+        <div class="field">
+          <p>Description</p>
+          <textarea placeholder="Describe your task..."></textarea>
+        </div>
+  
+        <!-- Category & Priority -->
+  
+        <div class="custom-select-wrapper">
+          <!-- Category -->
+          <div class="custom-select" id="categorySelect">
+            <div class="select-display">Select Category</div>
+            <div class="select-options">
+              <div class="option" data-value="personal">Personal</div>
+              <div class="option" data-value="work">Work</div>
+              <div class="option" data-value="study">Study</div>
+              <div class="option" data-value="fitness">Fitness</div>
+              <div class="option" data-value="finance">Finance</div>
+              <div class="option" data-value="learning">Learning</div>
+              <div class="option" data-value="project">Project</div>
+              <div class="option" data-value="misc">Misc</div>
+            </div>
+          </div>
+  
+          <!-- Priority -->
+          <div class="custom-select" id="prioritySelect">
+            <div class="select-display">Select Priority</div>
+            <div class="select-options">
+              <div class="option" data-value="high">High</div>
+              <div class="option" data-value="medium">Medium</div>
+              <div class="option" data-value="low">Low</div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- <div class="select-field">
+          <div>
+            <p>Category</p>
+            <select>
+              <option value="">Select category</option>
+              <option value="personal">Personal</option>
+              <option value="work">Work</option>
+              <option value="study">Study</option>
+              <option value="fitness">Fitness</option>
+              <option value="finance">Finance</option>
+              <option value="learning">Learning</option>
+              <option value="project">Project</option>
+              <option value="misc">Misc</option>
+            </select>
+          </div>
+          <div>
+            <p>Priority</p>
+            <select>
+              <option value="">Select priority</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div> -->
+  
+        <!-- Date Picker -->
+        <div class="field">
+          <p>Date</p>
+          <div class="custom-input" id="dateDisplay">Select Date</div>
+          <input type="date" id="taskDate" />
+        </div>
+  
+        <!-- Time Pickers -->
+        <div class="time-row">
+          <div class="field">
+            <p>Start Time</p>
+            <div class="custom-input" id="startTimeDisplay">Start Time</div>
+            <input type="time" id="startTime" />
+          </div>
+  
+          <div class="field">
+            <p>End Time</p>
+            <div class="custom-input" id="endTimeDisplay">End Time</div>
+            <input type="time" id="endTime" />
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit">Create Task</button>
+      </form>
+      </div>
     </div>
 
     <script src="colors.js"></script>

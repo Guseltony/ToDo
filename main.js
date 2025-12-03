@@ -176,10 +176,10 @@ function listTasks(tasks) {
     const priorityEl = document.createElement("span");
     priorityEl.classList.add("priority");
     priorityEl.textContent = `${todo.priority}`;
-    if (todo.priority === "high") {
+    if (todo.priority.toLowerCase() === "high") {
       priorityEl.style.color = priorityColors.high.text;
       priorityEl.style.backgroundColor = priorityColors.high.bg;
-    } else if (todo.priority === "medium") {
+    } else if (todo.priority.toLowerCase() === "medium") {
       priorityEl.style.color = priorityColors.medium.text;
       priorityEl.style.backgroundColor = priorityColors.medium.bg;
     } else {
@@ -300,6 +300,12 @@ showTaskFormBtn.addEventListener("click", () => {
   document.querySelector(".app-container").classList.add("modal-open");
 });
 
+document.querySelector(".close-task-form").addEventListener("click", () => {
+  document.querySelector(".form-container").classList.remove("display");
+
+  document.querySelector(".app-container").classList.remove("modal-open");
+});
+
 document.querySelectorAll(".custom-select").forEach((select) => {
   const display = select.querySelector(".select-display");
   const optionsContainer = select.querySelector(".select-options");
@@ -404,6 +410,16 @@ formEl.addEventListener("submit", (e) => {
   };
 
   formedTasks.push(tasksObj);
+  storageTask.push(tasksObj);
+
+  localStorage.setItem("tasks", JSON.stringify(storageTask));
+
+  getTasksLength();
+
+  listTasks(storageTask);
+
+  document.querySelector(".form-container").classList.remove("display");
+  document.querySelector(".app-container").classList.remove("modal-open");
 
   console.log(tasksObj);
   console.log(formedTasks);

@@ -3,6 +3,7 @@ const tabs = ["all", "completed", "pending", "due"];
 const taskTabs = document.querySelector(".task-tab");
 const taskContainer = document.querySelector(".tasks");
 
+const showTaskFormBtn = document.querySelector(".add-btn");
 
 let storageTask;
 let activeTab;
@@ -266,7 +267,6 @@ function checkTask(id) {
   });
 }
 
-
 function attachCheckListeners() {
   const checkEls = document.querySelectorAll(".checkEl");
   checkEls.forEach((el) => {
@@ -280,7 +280,6 @@ function attachCheckListeners() {
   });
 }
 
-
 // after you set uncheckedEl (querySelectorAll), attach listeners like this:
 // uncheckedEl.forEach((el) => {
 //   el.addEventListener("click", () => {
@@ -289,9 +288,131 @@ function attachCheckListeners() {
 //   });
 // });
 
-
 // tabs functionality
 
+const formedTasks = [];
 
+// * showing task form
 
+showTaskFormBtn.addEventListener("click", () => {
+  document.querySelector(".form-container").classList.add("display");
 
+  document.querySelector(".app-container").classList.add("modal-open");
+});
+
+document.querySelectorAll(".custom-select").forEach((select) => {
+  const display = select.querySelector(".select-display");
+  const optionsContainer = select.querySelector(".select-options");
+  const options = select.querySelectorAll(".option");
+
+  // Toggle dropdown
+  display.addEventListener("click", () => {
+    select.classList.toggle("open");
+  });
+
+  // Select option
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      display.textContent = option.textContent;
+      display.dataset.value = option.dataset.value;
+      select.classList.remove("open");
+    });
+  });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener("click", (e) => {
+  document.querySelectorAll(".custom-select").forEach((select) => {
+    if (!select.contains(e.target)) {
+      select.classList.remove("open");
+    }
+  });
+});
+
+// DATE PICKER
+const dateInput = document.getElementById("taskDate");
+const dateDisplay = document.getElementById("dateDisplay");
+
+dateDisplay.addEventListener("click", () => dateInput.showPicker());
+
+dateInput.addEventListener("change", () => {
+  dateDisplay.textContent = dateInput.value;
+  console.log(dateInput.value);
+  console.log(new Date(dateInput.value).getDay());
+});
+
+// START TIME
+const startInput = document.getElementById("startTime");
+const startDisplay = document.getElementById("startTimeDisplay");
+
+startDisplay.addEventListener("click", () => startInput.showPicker());
+
+startInput.addEventListener("change", () => {
+  startDisplay.textContent = startInput.value;
+});
+
+// END TIME
+const endInput = document.getElementById("endTime");
+const endDisplay = document.getElementById("endTimeDisplay");
+
+endDisplay.addEventListener("click", () => endInput.showPicker());
+
+endInput.addEventListener("change", () => {
+  endDisplay.textContent = endInput.value;
+});
+
+const formEl = document.getElementById("form");
+
+formEl.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("submitting");
+
+  const titleFormEl = document.querySelector(".task-input");
+
+  let descriptionFormEl = document.querySelector(".field textarea");
+
+  let title = titleFormEl.value;
+  let description = descriptionFormEl.value;
+
+  let allSelects = document.querySelectorAll(".select-display");
+  let category =
+    allSelects[0].textContent === "Select Category"
+      ? ""
+      : allSelects[0].textContent;
+  let priority =
+    allSelects[1].textContent === "Select Priority"
+      ? ""
+      : allSelects[1].textContent;
+
+  let date =
+    dateDisplay.textContent === "Select Date" ? "" : dateDisplay.textContent;
+  let startTime =
+    startDisplay.textContent === "Start Time" ? "" : startDisplay.textContent;
+  let endTime =
+    endDisplay.textContent === "End Time" ? "" : endDisplay.textContent;
+
+  const tasksObj = {
+    id: Date.now(),
+    title: title,
+    description: description,
+    category: category,
+    priority: priority,
+    completed: false,
+    dateCreated: date,
+    timeStart: startTime,
+    timeEnd: endTime,
+  };
+
+  formedTasks.push(tasksObj);
+
+  console.log(tasksObj);
+  console.log(formedTasks);
+
+  titleFormEl.value = "";
+  descriptionFormEl.value = "";
+  allSelects[0].textContent = "Select Category";
+  allSelects[1].textContent = "Select Priority";
+  dateDisplay.textContent = "Select Date";
+  startDisplay.textContent = "Start Time";
+  endDisplay.textContent = "End Time";
+});

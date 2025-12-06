@@ -1,4 +1,4 @@
-const tabsColors = {
+export const tabsColors = {
   light: {
     all: "#FFFFFF",
     completed: "#ECFDF5",
@@ -13,13 +13,13 @@ const tabsColors = {
   },
 };
 
-const priorityColors = {
+export const priorityColors = {
   high: { bg: "#FEE2E2", text: "#EF4444" },
   medium: { bg: "#FEF3C7", text: "#F59E0B" },
   low: { bg: "#E0F2FE", text: "#3B82F6" },
 };
 
-const categoryColors = {
+export const categoryColors = {
   work: { bg: "#DBEAFE", text: "#1D4ED8" },
   school: { bg: "#EDE9FE", text: "#6D28D9" },
   personal: { bg: "#FCE7F3", text: "#BE185D" },

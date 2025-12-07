@@ -5,13 +5,21 @@ import { todos } from "./js/tasksapi.js";
 import { tabEl } from "./js/tabs.js";
 import { fetchFromLocaleStorage } from "./js/localStorage.js";
 import { renderTasks } from "./js/renderTasks.js";
+import { updateTaskCounters } from "./js/taskCount.js";
+import { filterTodos } from "./js/filters.js";
 
 const taskContainer = document.querySelector(".tasks");
 
 const showTaskFormBtn = document.querySelector(".add-btn");
 
 export let storageTask = fetchFromLocaleStorage() || [];
-export let activeTab;
+// export let activeTab;
+
+export let activeTab = "all";
+
+export function setActiveTab(tab) {
+  activeTab = tab;
+}
 
 console.log("freshly:", storageTask);
 console.log("freshly:");
@@ -19,7 +27,7 @@ console.log("freshly:");
 
 function createTaskTab() {
   tabEl();
-  getTasksLength();
+  updateTaskCounters(storageTask);
 }
 
 createTaskTab();
@@ -29,45 +37,6 @@ const allTabs = document.querySelectorAll(".tab");
 let todosCopy = [...todos];
 
 // ! localStorage function
-
-export function filterTodos(name) {
-  let tasks = [...storageTask];
-
-  switch (name) {
-    case "completed":
-      tasks = tasks.filter((t) => t.completed);
-      activeTab = "completed";
-      taskContainer.innerHTML = "";
-      // renderTasks();
-      break;
-
-    case "pending":
-      tasks = tasks.filter((t) => !t.completed);
-      activeTab = "pending";
-      taskContainer.innerHTML = "";
-      // renderTasks();
-      break;
-
-    case "due":
-      tasks = tasks.filter((t) => t.due);
-      taskContainer.innerHTML = "";
-      // renderTasks();
-      break;
-
-    case "all":
-      tasks = tasks;
-      activeTab = "all";
-      taskContainer.innerHTML = "";
-      // renderTasks();
-      break;
-
-    // default:
-    //   break;
-  }
-  console.log(todosCopy);
-
-  return renderTasks(tasks);
-}
 
 allTabs.forEach((t) => {
   t.addEventListener("click", () => {
@@ -83,77 +52,6 @@ allTabs.forEach((t) => {
     filterTodos(t.dataset.name);
   });
 });
-
-// getting the number of all tasks, completed task and pending task
-export function getTasksLength() {
-  console.log("setting the length");
-  console.log("from local storage:", storageTask);
-  const all = document.querySelector(".all");
-  const completed = document.querySelector(".completed");
-  const pending = document.querySelector(".pending");
-
-  const allLength = storageTask.length;
-  all.textContent = allLength ? allLength : "0";
-  const completedTaskArray = storageTask.filter((t) => t.completed);
-  const completedTaskLength = completedTaskArray.length;
-  completed.textContent = completedTaskLength ? completedTaskLength : "0";
-  const pendingTaskArray = storageTask.filter((t) => !t.completed);
-  const pendingTaskLength = pendingTaskArray.length;
-  pending.textContent = pendingTaskLength ? pendingTaskLength : "0";
-}
-
-// ! called the tasks api.
-
-let uncheckedEl;
-
-console.log(todosCopy);
-
-// renderTasks(todosCopy);
-
-// * save to local storage
-
-// localStorage.setItem('tasks', JSON.stringify(todosCopy))
-
-uncheckedEl = document.querySelectorAll(".checkEl");
-
-// export function checkTask(id) {
-//   // console.log(todosCopy);
-//   console.log("checking");
-//   for (let i = 0; i < storageTask.length; i++) {
-//     if (storageTask[i].id === id) {
-//       storageTask[i].completed = true;
-//       break;
-//     }
-//   }
-//   // re-render: clear container and call renderTasks again
-//   taskContainer.innerHTML = "";
-//   console.log("storageTask:", storageTask);
-
-//   if (activeTab === "pending") filterTodos("pending");
-//   else renderTasks(storageTask);
-
-//   localStorage.setItem("tasks", JSON.stringify(storageTask));
-//   getTasksLength();
-
-//   // re-query checks and re-attach listeners (because DOM changed)
-//   uncheckedEl = document.querySelectorAll(".checkEl");
-//   uncheckedEl.forEach((el) => {
-//     el.addEventListener("click", () => {
-//       const id = Number(el.dataset.id);
-//       checkTask(id);
-//     });
-//   });
-// }
-
-// after you set uncheckedEl (querySelectorAll), attach listeners like this:
-// uncheckedEl.forEach((el) => {
-//   el.addEventListener("click", () => {
-//     const id = Number(el.dataset.id); // convert to number if your todo ids are numbers
-//     checkTask(id);
-//   });
-// });
-
-// tabs functionality
 
 const formedTasks = [];
 
@@ -283,13 +181,10 @@ formEl.addEventListener("submit", (e) => {
 
   renderTasks(storageTask);
 
-  getTasksLength();
+  updateTaskCounters(storageTask);
 
   document.querySelector(".form-container").classList.remove("display");
   document.querySelector(".app-container").classList.remove("modal-open");
-
-  console.log(tasksObj);
-  console.log(formedTasks);
 
   titleFormEl.value = "";
   descriptionFormEl.value = "";

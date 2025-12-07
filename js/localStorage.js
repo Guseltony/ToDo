@@ -1,4 +1,3 @@
-import { getTasksLength } from "../main.js";
 import { renderTasks } from "./renderTasks.js";
 
 export function fetchFromLocaleStorage() {

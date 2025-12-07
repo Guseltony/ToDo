@@ -1,11 +1,8 @@
 const taskContainer = document.querySelector(".tasks");
-import {
-  activeTab,
-  filterTodos,
-  getTasksLength,
-  storageTask,
-} from "../main.js";
+import { activeTab, storageTask } from "../main.js";
+import { filterTodos } from "./filters.js";
 import { renderTasks } from "./renderTasks.js";
+import { updateTaskCounters } from "./taskCount.js";
 
 // let activeTab;
 
@@ -50,7 +47,7 @@ function checkTask(id) {
   console.log("activeTab in check functionality:", activeTab);
 
   localStorage.setItem("tasks", JSON.stringify(storageTask));
-  getTasksLength();
+  updateTaskCounters(storageTask);
 
   // re-query checks and re-attach listeners (because DOM changed)
   uncheckedEl = document.querySelectorAll(".checkEl");

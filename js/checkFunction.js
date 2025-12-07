@@ -1,11 +1,24 @@
 const taskContainer = document.querySelector(".tasks");
-import { getTasksLength, storageTask } from "../main.js";
+import {
+  activeTab,
+  filterTodos,
+  getTasksLength,
+  storageTask,
+} from "../main.js";
 import { renderTasks } from "./renderTasks.js";
 
-let activeTab;
+// let activeTab;
+
+let uncheckedEl;
+
+// console.log(todosCopy);
+
+uncheckedEl = document.querySelectorAll(".checkEl");
 
 export function attachCheckListeners() {
   const checkEls = document.querySelectorAll(".checkEl");
+
+  console.log(checkEls);
   checkEls.forEach((el) => {
     el.removeEventListener?.("click", el._boundClick); // safe-remove any previous (optional)
     const handler = () => {
@@ -30,8 +43,11 @@ function checkTask(id) {
   taskContainer.innerHTML = "";
   console.log("storageTask:", storageTask);
 
-  if (activeTab === "pending") filterTodos("pending");
-  else renderTasks(storageTask);
+  if (activeTab === "pending") {
+    console.log("pending activeTab:", activeTab);
+    filterTodos("pending");
+  } else renderTasks(storageTask);
+  console.log("activeTab in check functionality:", activeTab);
 
   localStorage.setItem("tasks", JSON.stringify(storageTask));
   getTasksLength();

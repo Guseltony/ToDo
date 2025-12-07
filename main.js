@@ -11,7 +11,7 @@ const taskContainer = document.querySelector(".tasks");
 const showTaskFormBtn = document.querySelector(".add-btn");
 
 export let storageTask = fetchFromLocaleStorage() || [];
-let activeTab;
+export let activeTab;
 
 console.log("freshly:", storageTask);
 console.log("freshly:");
@@ -30,7 +30,7 @@ let todosCopy = [...todos];
 
 // ! localStorage function
 
-function filterTodos(name) {
+export function filterTodos(name) {
   let tasks = [...storageTask];
 
   switch (name) {
@@ -279,9 +279,11 @@ formEl.addEventListener("submit", (e) => {
 
   localStorage.setItem("tasks", JSON.stringify(storageTask));
 
-  getTasksLength();
+  console.log("inside the form task:", storageTask);
 
   renderTasks(storageTask);
+
+  getTasksLength();
 
   document.querySelector(".form-container").classList.remove("display");
   document.querySelector(".app-container").classList.remove("modal-open");

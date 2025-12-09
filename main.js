@@ -7,7 +7,7 @@ import { fetchFromLocaleStorage } from "./js/localStorage.js";
 import { renderTasks } from "./js/renderTasks.js";
 import { updateTaskCounters } from "./js/taskCount.js";
 import { filterTodos } from "./js/filters.js";
-import { closeFormModal, openFormModal } from "./js/modal.js";
+import { toggleModal } from "./js/modal.js";
 
 const taskContainer = document.querySelector(".tasks");
 
@@ -51,11 +51,15 @@ allTabs.forEach((t) => {
 const formedTasks = [];
 
 // * showing task form
+
 const showTaskFormBtn = document.querySelector(".add-btn");
 const closeTaskFormBtn = document.querySelector(".close-task-form");
+showTaskFormBtn.addEventListener("click", () => toggleModal("open"));
+closeTaskFormBtn.addEventListener("click", () => toggleModal("close"));
 
-showTaskFormBtn.addEventListener("click", openFormModal);
-closeTaskFormBtn.addEventListener("click", closeFormModal);
+
+// showTaskFormBtn.addEventListener("click", openFormModal);
+// closeTaskFormBtn.addEventListener("click", closeFormModal);
 
 document.querySelectorAll(".custom-select").forEach((select) => {
   const display = select.querySelector(".select-display");

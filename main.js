@@ -7,10 +7,9 @@ import { fetchFromLocaleStorage } from "./js/localStorage.js";
 import { renderTasks } from "./js/renderTasks.js";
 import { updateTaskCounters } from "./js/taskCount.js";
 import { filterTodos } from "./js/filters.js";
+import { closeFormModal, openFormModal } from "./js/modal.js";
 
 const taskContainer = document.querySelector(".tasks");
-
-const showTaskFormBtn = document.querySelector(".add-btn");
 
 export let storageTask = fetchFromLocaleStorage() || [];
 // export let activeTab;
@@ -21,10 +20,6 @@ export function setActiveTab(tab) {
   activeTab = tab;
 }
 
-console.log("freshly:", storageTask);
-console.log("freshly:");
-// fetchFromLocaleStorage(storageTask);
-
 function createTaskTab() {
   tabEl();
   updateTaskCounters(storageTask);
@@ -34,7 +29,7 @@ createTaskTab();
 
 const allTabs = document.querySelectorAll(".tab");
 
-let todosCopy = [...todos];
+// let todosCopy = [...todos];
 
 // ! localStorage function
 
@@ -56,18 +51,11 @@ allTabs.forEach((t) => {
 const formedTasks = [];
 
 // * showing task form
+const showTaskFormBtn = document.querySelector(".add-btn");
+const closeTaskFormBtn = document.querySelector(".close-task-form");
 
-showTaskFormBtn.addEventListener("click", () => {
-  document.querySelector(".form-container").classList.add("display");
-
-  document.querySelector(".app-container").classList.add("modal-open");
-});
-
-document.querySelector(".close-task-form").addEventListener("click", () => {
-  document.querySelector(".form-container").classList.remove("display");
-
-  document.querySelector(".app-container").classList.remove("modal-open");
-});
+showTaskFormBtn.addEventListener("click", openFormModal);
+closeTaskFormBtn.addEventListener("click", closeFormModal);
 
 document.querySelectorAll(".custom-select").forEach((select) => {
   const display = select.querySelector(".select-display");

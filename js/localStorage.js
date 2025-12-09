@@ -1,9 +1,10 @@
 import { renderTasks } from "./renderTasks.js";
+import { todos } from "./tasksapi.js";
 
 export function fetchFromLocaleStorage() {
   // taking from the localStorage
   console.log("from local storage");
-  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
   if (tasks.length === 0) {
     tasks = [...todos];

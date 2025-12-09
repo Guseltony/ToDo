@@ -8,6 +8,8 @@ import { renderTasks } from "./js/renderTasks.js";
 import { updateTaskCounters } from "./js/taskCount.js";
 import { filterTodos } from "./js/filters.js";
 import { toggleModal } from "./js/modal.js";
+import { initCustomSelects } from "./js/customSelects.js";
+import { setupPicker } from "./js/dateTimePicker.js";
 
 const taskContainer = document.querySelector(".tasks");
 
@@ -57,29 +59,9 @@ const closeTaskFormBtn = document.querySelector(".close-task-form");
 showTaskFormBtn.addEventListener("click", () => toggleModal("open"));
 closeTaskFormBtn.addEventListener("click", () => toggleModal("close"));
 
-
-// showTaskFormBtn.addEventListener("click", openFormModal);
-// closeTaskFormBtn.addEventListener("click", closeFormModal);
-
-document.querySelectorAll(".custom-select").forEach((select) => {
-  const display = select.querySelector(".select-display");
-  const optionsContainer = select.querySelector(".select-options");
-  const options = select.querySelectorAll(".option");
-
-  // Toggle dropdown
-  display.addEventListener("click", () => {
-    select.classList.toggle("open");
-  });
-
-  // Select option
-  options.forEach((option) => {
-    option.addEventListener("click", () => {
-      display.textContent = option.textContent;
-      display.dataset.value = option.dataset.value;
-      select.classList.remove("open");
-    });
-  });
-});
+document
+  .querySelectorAll(".custom-select")
+  .forEach((select) => initCustomSelects(select));
 
 // Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
@@ -90,37 +72,24 @@ document.addEventListener("click", (e) => {
   });
 });
 
-// DATE PICKER
 const dateInput = document.getElementById("taskDate");
 const dateDisplay = document.getElementById("dateDisplay");
 
-dateDisplay.addEventListener("click", () => dateInput.showPicker());
-
-dateInput.addEventListener("change", () => {
-  dateDisplay.textContent = dateInput.value;
-  console.log(dateInput.value);
-  console.log(new Date(dateInput.value).getDay());
-});
-
-// START TIME
 const startInput = document.getElementById("startTime");
 const startDisplay = document.getElementById("startTimeDisplay");
 
-startDisplay.addEventListener("click", () => startInput.showPicker());
-
-startInput.addEventListener("change", () => {
-  startDisplay.textContent = startInput.value;
-});
-
-// END TIME
 const endInput = document.getElementById("endTime");
 const endDisplay = document.getElementById("endTimeDisplay");
 
-endDisplay.addEventListener("click", () => endInput.showPicker());
+dateDisplay.addEventListener("click", () =>
+  setupPicker(dateInput, dateDisplay)
+);
 
-endInput.addEventListener("change", () => {
-  endDisplay.textContent = endInput.value;
-});
+startDisplay.addEventListener("click", () =>
+  setupPicker(startInput, startDisplay)
+);
+
+endDisplay.addEventListener("click", () => setupPicker(endInput, endDisplay));
 
 const formEl = document.getElementById("form");
 
@@ -178,11 +147,11 @@ formEl.addEventListener("submit", (e) => {
   document.querySelector(".form-container").classList.remove("display");
   document.querySelector(".app-container").classList.remove("modal-open");
 
-  titleFormEl.value = "";
-  descriptionFormEl.value = "";
-  allSelects[0].textContent = "Select Category";
-  allSelects[1].textContent = "Select Priority";
-  dateDisplay.textContent = "Select Date";
-  startDisplay.textContent = "Start Time";
-  endDisplay.textContent = "End Time";
+  // titleFormEl.value = "";
+  // descriptionFormEl.value = "";
+  // allSelects[0].textContent = "Select Category";
+  // allSelects[1].textContent = "Select Priority";
+  // dateDisplay.textContent = "Select Date";
+  // startDisplay.textContent = "Start Time";
+  // endDisplay.textContent = "End Time";
 });

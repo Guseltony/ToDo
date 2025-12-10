@@ -9,6 +9,6 @@ export function renderTasks(tasks) {
   tasks.map((todo) => {
     const taskEl = taskCard(todo);
     taskContainer.appendChild(taskEl);
-    attachCheckListeners();
   });
+  attachCheckListeners();
 }

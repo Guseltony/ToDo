@@ -1,4 +1,8 @@
-const formEl = document.getElementById("form");
+import { storageTask } from "../main.js";
+import { saveTasks } from "./localStorage.js";
+import { toggleModal } from "./modal.js";
+import { renderTasks } from "./renderTasks.js";
+import { updateTaskCounters } from "./taskCount.js";
 
 const allSelects = document.querySelectorAll(".select-display");
 
@@ -14,39 +18,27 @@ const endDisplay = document.getElementById("endTimeDisplay");
 
 let formValue = {};
 
-function readFormValues() {
-  formEl.addEventListener("submit", (e) => {
-    e.preventDefault();
+function readFormValues(e) {
+  e.preventDefault();
 
-    let title = titleFormEl.value;
-    let description = descriptionFormEl.value;
-
-    let category =
+  formValue = {
+    title: titleFormEl.value,
+    description: descriptionFormEl.value,
+    category:
       allSelects[0].textContent === "Select Category"
         ? ""
-        : allSelects[0].textContent;
-    let priority =
+        : allSelects[0].textContent,
+    priority:
       allSelects[1].textContent === "Select Priority"
         ? ""
-        : allSelects[1].textContent;
-
-    let date =
-      dateDisplay.textContent === "Select Date" ? "" : dateDisplay.textContent;
-    let startTime =
-      startDisplay.textContent === "Start Time" ? "" : startDisplay.textContent;
-    let endTime =
-      endDisplay.textContent === "End Time" ? "" : endDisplay.textContent;
-
-    formValue = {
-      title: title,
-      description: description,
-      category: category,
-      priority: priority,
-      date: date,
-      startTime: startTime,
-      endTime: endTime,
-    };
-  });
+        : allSelects[1].textContent,
+    date:
+      dateDisplay.textContent === "Select Date" ? "" : dateDisplay.textContent,
+    startTime:
+      startDisplay.textContent === "Start Time" ? "" : startDisplay.textContent,
+    endTime:
+      endDisplay.textContent === "End Time" ? "" : endDisplay.textContent,
+  };
 
   resetForm();
 }
@@ -62,7 +54,7 @@ function resetForm() {
 }
 
 function createTaskObject(formValue) {
-  return (tasksObj = {
+  return {
     id: Date.now(),
     title: formValue.title,
     description: formValue.description,
@@ -72,5 +64,15 @@ function createTaskObject(formValue) {
     dateCreated: formValue.date,
     timeStart: formValue.startTime,
     timeEnd: formValue.endTime,
-  });
+  };
+}
+
+export function taskSubmission(e) {
+  readFormValues(e);
+  const newTask = createTaskObject(formValue);
+  storageTask.push(newTask);
+  saveTasks(storageTask);
+  renderTasks(storageTask);
+  updateTaskCounters(storageTask);
+  toggleModal("close");
 }

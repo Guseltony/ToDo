@@ -1,4 +1,3 @@
-import { attachCheckListeners } from "./checkFunction.js";
 import { tabsColors, priorityColors, categoryColors } from "./colors.js";
 import { createElement } from "./element.js";
 
@@ -30,40 +29,17 @@ export function taskCard(todo) {
   ]);
 
   const priorityEl = createElement("span", "priority", todo.priority);
-  if (todo.priority.toLowerCase() === "high") {
-    priorityEl.style.color = priorityColors.high.text;
-    priorityEl.style.backgroundColor = priorityColors.high.bg;
-  } else if (todo.priority.toLowerCase() === "medium") {
-    priorityEl.style.color = priorityColors.medium.text;
-    priorityEl.style.backgroundColor = priorityColors.medium.bg;
-  } else {
-    priorityEl.style.color = priorityColors.low.text;
-    priorityEl.style.backgroundColor = priorityColors.low.bg;
-  }
+  const priorityStyle = priorityColors[todo.priority.toLowerCase()];
+  priorityEl.style.color = priorityStyle.text;
+  priorityEl.style.backgroundColor = priorityStyle.bg;
   const priority = createElement("p", "", "Priority:", [priorityEl]);
   priority.style.fontSize = "14px";
 
   const categoryEl = createElement("span", "category");
+  const categoryStyle = categoryColors[todo.category.toLowerCase()];
+  categoryEl.style.color = categoryStyle?.text;
+  categoryEl.style.background = categoryStyle?.bg;
   categoryEl.textContent = `${todo.category}`;
-  if (todo.category === "Work") {
-    categoryEl.style.color = categoryColors.work.text;
-    categoryEl.style.backgroundColor = categoryColors.work.bg;
-  } else if (todo.category === "School") {
-    categoryEl.style.color = categoryColors.school.text;
-    categoryEl.style.backgroundColor = categoryColors.school.bg;
-  } else if (todo.category === "Personal") {
-    categoryEl.style.color = categoryColors.personal.text;
-    categoryEl.style.backgroundColor = categoryColors.personal.bg;
-  } else if (todo.category === "Finance") {
-    categoryEl.style.color = categoryColors.finance.text;
-    categoryEl.style.backgroundColor = categoryColors.finance.bg;
-  } else if (todo.category === "Health") {
-    categoryEl.style.color = categoryColors.health.text;
-    categoryEl.style.backgroundColor = categoryColors.health.bg;
-  } else {
-    categoryEl.style.color = categoryColors.misc.text;
-    categoryEl.style.backgroundColor = categoryColors.misc.bg;
-  }
   const category = createElement("p", "", "Category:", [categoryEl]);
   category.style.fontSize = "14px";
 
@@ -81,8 +57,6 @@ export function taskCard(todo) {
 
   if (todo.completed) taskEl.style.backgroundColor = tabsColors.dark.completed;
   else taskEl.style.backgroundColor = tabsColors.dark.pending;
-
-  attachCheckListeners();
 
   return taskEl;
 }

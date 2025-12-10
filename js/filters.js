@@ -1,9 +1,5 @@
-// import { activeTab } from "../main.js";
-
 import { activeTab, setActiveTab, storageTask } from "../main.js";
 import { renderTasks } from "./renderTasks.js";
-
-// const taskContainer = document.querySelector(".tasks");
 
 const filterMap = {
   all: (tasks) => tasks,
@@ -18,12 +14,7 @@ export function filterTodos(filterType) {
 
   setActiveTab(filterType);
 
-  // activeTab = filterType;
-
-  console.log("filterType:", filterType);
-
   const filtered = filterMap[filterType](storageTask);
-  console.log("activeTab:", activeTab);
 
   renderTasks(filtered);
 }

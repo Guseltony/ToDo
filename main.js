@@ -10,6 +10,7 @@ import { filterTodos } from "./js/filters.js";
 import { toggleModal } from "./js/modal.js";
 import { initCustomSelects } from "./js/customSelects.js";
 import { setupPicker } from "./js/dateTimePicker.js";
+import { taskSubmission } from "./js/form.js";
 
 const taskContainer = document.querySelector(".tasks");
 
@@ -49,8 +50,6 @@ allTabs.forEach((t) => {
     filterTodos(t.dataset.name);
   });
 });
-
-const formedTasks = [];
 
 // * showing task form
 
@@ -93,65 +92,4 @@ endDisplay.addEventListener("click", () => setupPicker(endInput, endDisplay));
 
 const formEl = document.getElementById("form");
 
-formEl.addEventListener("submit", (e) => {
-  e.preventDefault();
-  console.log("submitting");
-
-  const titleFormEl = document.querySelector(".task-input");
-
-  let descriptionFormEl = document.querySelector(".field textarea");
-
-  let title = titleFormEl.value;
-  let description = descriptionFormEl.value;
-
-  let allSelects = document.querySelectorAll(".select-display");
-  let category =
-    allSelects[0].textContent === "Select Category"
-      ? ""
-      : allSelects[0].textContent;
-  let priority =
-    allSelects[1].textContent === "Select Priority"
-      ? ""
-      : allSelects[1].textContent;
-
-  let date =
-    dateDisplay.textContent === "Select Date" ? "" : dateDisplay.textContent;
-  let startTime =
-    startDisplay.textContent === "Start Time" ? "" : startDisplay.textContent;
-  let endTime =
-    endDisplay.textContent === "End Time" ? "" : endDisplay.textContent;
-
-  const tasksObj = {
-    id: Date.now(),
-    title: title,
-    description: description,
-    category: category,
-    priority: priority,
-    completed: false,
-    dateCreated: date,
-    timeStart: startTime,
-    timeEnd: endTime,
-  };
-
-  formedTasks.push(tasksObj);
-  storageTask.push(tasksObj);
-
-  localStorage.setItem("tasks", JSON.stringify(storageTask));
-
-  console.log("inside the form task:", storageTask);
-
-  renderTasks(storageTask);
-
-  updateTaskCounters(storageTask);
-
-  document.querySelector(".form-container").classList.remove("display");
-  document.querySelector(".app-container").classList.remove("modal-open");
-
-  // titleFormEl.value = "";
-  // descriptionFormEl.value = "";
-  // allSelects[0].textContent = "Select Category";
-  // allSelects[1].textContent = "Select Priority";
-  // dateDisplay.textContent = "Select Date";
-  // startDisplay.textContent = "Start Time";
-  // endDisplay.textContent = "End Time";
-});
+formEl.addEventListener("submit", (e) => taskSubmission(e));

@@ -21,9 +21,11 @@ export const priorityColors = {
 
 export const categoryColors = {
   work: { bg: "#DBEAFE", text: "#1D4ED8" },
-  school: { bg: "#EDE9FE", text: "#6D28D9" },
+  study: { bg: "#EDE9FE", text: "#6D28D9" },
   personal: { bg: "#FCE7F3", text: "#BE185D" },
   finance: { bg: "#DCFCE7", text: "#059669" },
-  health: { bg: "#FEF9C3", text: "#CA8A04" },
+  fitness: { bg: "#FEF9C3", text: "#CA8A04" },
   misc: { bg: "#F3F4F6", text: "#4B5563" },
+  learning: { bg: "#E0F2FE", text: "#0369A1" },
+  project: { bg: "#FDEAD7", text: "#C2410C" },
 };
